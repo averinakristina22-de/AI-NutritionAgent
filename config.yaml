@@ -1,0 +1,132 @@
+# Nutrition Agent System Configuration
+
+# Model Configuration
+model:
+  name: "gemini-2.5-flash-lite"
+  provider: "google"
+  temperature: 0.7
+  max_tokens: 2048
+
+# Retry Configuration
+retry:
+  max_attempts: 5
+  exp_base: 7
+  initial_delay: 1
+  retry_codes: [429, 500, 503, 504]
+
+# Agent Configuration
+agents:
+  interview:
+    name: "interview_agent"
+    enabled: true
+    max_conversation_turns: 20
+
+  analysis:
+    name: "analysis_agent"
+    enabled: true
+    require_confirmation: true  # Confirm calculations with user
+
+  compatibility:
+    name: "compatibility_agent"
+    enabled: true
+    max_recipes_to_find: 50
+
+  recipe_generator:
+    name: "recipe_generator_agent"
+    enabled: true
+    default_plan_duration: 7  # days
+
+# Tool Configuration
+tools:
+  kbju_calculator:
+    enabled: true
+    min_age: 18
+    min_calories_female: 1200
+    min_calories_male: 1500
+
+  nutrition_db:
+    enabled: true
+    db_type: "mock"  # or "sqlite", "postgresql", etc.
+    db_path: "./data/nutrition.db"
+
+# Session Configuration
+session:
+  service_type: "in_memory"  # or "persistent"
+  timeout_minutes: 60
+  max_concurrent_sessions: 100
+
+# Memory Configuration
+memory:
+  db_path: "./nutrition_memory.db"
+  enable_history: true
+  max_consultation_history: 10
+
+# Consultation Workflow
+workflow:
+  stages:
+    - interview
+    - analysis
+    - compatibility
+    - recipe_generation
+
+  auto_progress: false  # If true, automatically move to next stage
+  require_confirmation: true  # Ask user before each stage
+
+# KBJU Calculation Defaults
+kbju_defaults:
+  activity_levels:
+    sedentary: 1.2
+    lightly_active: 1.375
+    moderately_active: 1.55
+    very_active: 1.725
+    extremely_active: 1.9
+
+  goal_adjustments:
+    weight_loss:
+      slow: -250
+      moderate: -500
+      aggressive: -750
+    muscle_gain:
+      slow: 200
+      moderate: 350
+      aggressive: 500
+
+  protein_per_kg:
+    weight_loss: 2.0
+    maintenance: 1.8
+    muscle_gain: 2.2
+    recomp: 2.0
+
+# Recipe Database Configuration
+recipe_db:
+  mock_mode: true  # Use mock data for development
+  min_compatibility_score: 70
+  max_results: 20
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_to_file: true
+  log_file: "./logs/nutrition_agent.log"
+  log_format: "[%(asctime)s] %(levelname)s - %(name)s - %(message)s"
+
+# API Configuration (for future integrations)
+api:
+  enable_rest_api: false
+  host: "0.0.0.0"
+  port: 8000
+  cors_enabled: true
+
+# Security
+security:
+  require_auth: false
+  api_key_required: false
+  rate_limit_per_minute: 60
+
+# Feature Flags
+features:
+  user_simulation: false
+  meal_plan_export: true
+  shopping_list_generation: true
+  nutrition_tracking: false
+  multi_language: false
