@@ -57,7 +57,7 @@ Agent: save_user_profile → calculate_kbju → validate_data →
 
 ---
 
-## What You Created
+## What was Created
 
 ### System Overview
 
